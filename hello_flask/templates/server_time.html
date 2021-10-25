@@ -1,9 +1,24 @@
 <!DOCTYPE html>
-<html>
+<html lang = "en">
     <head>
-        <!-- head definitions go here -->
+	    <meta charset="utf-8">
+	    <script src="https://code.jquery.com/jquery-3.6.0.js" integrity="sha256-H+K7U5CnXl1h5ywQfKtSj8PCmoN9aaq30gDh27Xc0jk=" crossorigin="anonymous"></script>
+
+	    <h1> The title is {{ mytitle }} </h1>        
     </head>
-    <body>
-	    <h1>Time is {{server_time}}</h1>
+
+    <!---setting the background color-->
+    <body style="background-color:black;color:white;White text, black background;text-align:center">
+	    <img src = "/static/img/tree.gif">
+	   
+	    <p id="mytime"></p>
+	    <!---funtion to locally display time-->
+	    	<script>                                                                                                                                                                                                                 setInterval( function(){ $('#mytime').html( "Time is " + new Date());}, 500);                                                                                                                            </script>                    
+	    <!---changing color and font size-->
+	    <p style="color:white; font-size:22px;">The csis444 class is super cool.</p>
+	    <!---reading from the server-->
+	    <p>{{ mycontent }}</p>
+	    
+	    <p>The server time is {{server_time}}</p>
     </body>
 </html>
