@@ -56,9 +56,10 @@ def ss1():
     pagetitle = 'The HomePage'
     myparagraph = 'The professor is a good person, and he will give me and A.'
     return render_template('server_time.html',mytitle = pagetitle,mycontent =myparagraph ,server_time= str(datetime.datetime.now()) )
+
 #Assigment 3
 
-c@app.route('/signup', methods=['POST'])#endpoint
+@app.route('/signup', methods=['POST'])#endpoint
 def signup():
     username = request.form['username_signup_form']
     password = request.form['password_signup_form']
@@ -71,7 +72,7 @@ def signup():
         global_db_con.commit()
         jwt_str = jwt.encode({"username":username,"password":password}, JWT_SECRET, algorithm = "HS256")
         
-        return json_response (jwt = jwt_str)
+        return json_response (data = jwt_str)
     else:
         print("Existing username")
         str = (' Username exist');
@@ -112,11 +113,7 @@ def books():
     bookList = [] 
     for r in book:
         bookList.append(r)
-
-        return json_response (data =
-
-
-
+        return json_response (data = book)
 
 app.run(host='0.0.0.0', port=80)
 
