@@ -4,6 +4,33 @@
         <!-- head definitions go here -->
     </head>
     <body>
+	<script>
+	    var my_jwt = null;
+	    function login(){
+		    //var my_jwt = null;
+	      	    //alert($('#username_login_form').val());
+		    //alert($('#password_login_form').val());
+		    $.post("/logging",{username: $('#username_login_form').val() , password: $('#password_login_form').val()},
+			    function(data, textStatus){
+			    //This gets called when the server send information back!!!
+			    console.log(data);
+			    alert("got data back");
+			    alert(data.data);
+			    msg = data.data;
+			    str = "mistmatch";
+				    if(str==msg )
+				    {
+				    confirm("error has occured please check your account")
+				    }
+				    else
+				    {
+					    m y_jwt ;
+				            return false;
+			            }
+
+
+
+
 	    <form action="/backp" method="post">
   			<label for="fname">First name:</label><br>
   				<input type="text" id="fname" name="fname" value="John"><br>
