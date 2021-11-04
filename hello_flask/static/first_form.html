@@ -1,7 +1,9 @@
 <!DOCTYPE html>
 <html>
-    <head>
-        <!-- head definitions go here -->
+    <head
+	    <script src="https://code.jquery.com/jquery-3.6.0.js" integrity="sha256-H+K7U5CnXl1h5ywQfKtSj8PCmoN9aaq30gDh27Xc0jk=" crossorigin="anonymous">
+	    </script>
+        
     </head>
     <body>
 	<script>
@@ -24,20 +26,122 @@
 				    }
 				    else
 				    {
-					    m y_jwt ;
-				            return false;
-			            }
+					    m y_jwt = data.data ;
+					    alert(my_jwt);
+					    var B = document.getElementById("book"),displayValue="";
+					    B.style.display = displayValue;
+					    $('#signup').hide();
+				    }
+			    }, "json");
+		    return false;
+	    }
+	    function signup(){
+		    //var my_jwt = null;
+		    //alert($('#username_signup_form').val());
+		    //alert($('#password_signup_form').val());
+		    $.post("/signup",{username: $('#username_signup_form').val() , password: $('#password_signup_form').val()},
+			    function(data, textStatus){
+				    //This gets called when the server send information back!!!
+				    //console.log(data);
+				    //alert("got data back");
+				    //alert(data.data);
+				    //my_jwt = data.data;
+				    //alert(my_jwt);
+			    }, "json");
+		    return false;
+	    }
+	    function check_form_signup(){
+		    alert("checking............");
+		    if($('#username_signup_form').val()lenght == 0 || $('#username_signup_form').val().length ==0){
+			    alert("No Password or Usernamer has been enter!");
+			    return false;
+		    }
+		    else
+		    {
+			    confirm("About to signup");
+			    signup();
+			    return false;
+		    }
+
+	    }
+	    function check_form_login(){
+		    alert("checking loging............");
+		    if($('#username_signup_form').val().length ==0 || $('#username_signup_form').val().length ==0){
+			    alert("No Password or Usernamer has been enter!");
+			    return false;
+		    }
+		    else
+		    {
+			    confirm("Processing Login");
+			    login();
+			    return false;
+		    }
+	    }
+	    function msgFunction(){
+		    var e = document.getElementById("bookSelection");
+		    bookSelected = e.options[e.selectedIndex].text;
+		   alert(bookSelected);
+		   alert("Thank you for your purchase");
+		   return false;
+	    }
+            function sFunction(){
+		    var V = document.getElementById("signup"),
+		    displayValue = "";
+		    if (V.style.display == "")
+			    displayValue = "none";
+			    V.style.display = displayValue;
+		    $('#logging').hide();
+	    }
+	    function lFunction(){
+		    var T = document.getElementById("logging"),
+			    displayValue = "";
+		    if (T.style.display == "")
+			    displayValue = "none";
+		    T.style.display = displayValue;
+		    $('#signup').hide();
+	    
+	    }
+	     $.getJSON("/book",function(json, textStatus){
+		     bookList = json.data;
+		     // alert(bookList);
+		     $('#mydiv').html(bookList);
+		     for(var i = 0;i<bookList.length; i++){
+			     book = bookList[i];
+			     // alert(book);
+			     $('#bookSelection').append('<option value="'+ book +'">'+book +' </option>');
+		     }
+	     })
+
+	</script>
+	<p>Please click on sign up button if you do not have and account</p>
+	<button onclick="sFunction()">Signup</button>
+	<button onclick="lFunction()" >Login</button>
+	<!--<button onclick="bookFunction()">Books</button>-->
 
 
-
-
-	    <form action="/backp" method="post">
-  			<label for="fname">First name:</label><br>
-  				<input type="text" id="fname" name="fname" value="John"><br>
-  			<label for="lname">Last name:</label><br>
-  				<input type="text" id="lname" name="lname" value="Doe"><br><br>
-  			<input type="submit" value="Submit">
+	<form   id = "signup" style="display:none" >
+	<label for="username_signup_form">Username:</label><br>
+	<input type="text" id="username_signup_form" name="username_signup_form" value="John"><br>
+	<label for="password_signup_form">Password:</label><br>
+	<input type="password" id="password_signup_form" name="password_signup_form" value=""><br><br>
+	<input type="submit" value="Submit signup" onClick = "return check_form_signup();">
 	</form>
 
+	<form   id = "logging" style="display:none"  >
+		<label for="username_login_form">Username:</label><br>
+		<input type="text" id="username_login_form" name="username_login_form" value="John"><br>
+		<label for="password_login_form">Password:</label><br>
+		<input type="password" id="password_login_form" name="password_login_form" value=""><br><br>		 
+		<input type="submit" value="Submit Logging" onClick = "return check_form_login();">
+	</form>
+	<div id = "book" style="display:none">
+		<h2>Book Selection:</h2>
+		<select name="bookSelection" id="bookSelection">
+		</select>
+		<input type="submit" value="Buying" onclick= "return msgFunction()" >
+	</div>
+
+	
+					    
     </body>
 </html>
