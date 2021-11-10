@@ -7,9 +7,10 @@ import bcrypt
 
 
 from db_con import get_db_instance, get_db
-import datetime
+
 
 app = Flask(__name__)
+FlaskJSON(app)
 
 
 USER_PASSWORDS = { "cjardin": "strong password"}
@@ -61,8 +62,10 @@ def ss1():
 
 @app.route('/signup', methods=['POST'])#endpoint
 def signup():
-    username = request.form['username_signup_form']
-    password = request.form['password_signup_form']
+    print(request.form)
+    username = request.form['username']
+    password = request.form['password']
+    
     cur = global_db_con.cursor()
     cur.execute(f"select * from _user where username = '{username}';")
     found = cur.fetchone()
@@ -81,17 +84,16 @@ def signup():
 @app.route('/logging', methods=['POST'])#endpoint
 def logging():
     print(request.form)
-    username = request.form['username_logging_form']
-    password = request.form['password_logging_form']
-    print("The username from the form: " + username)
-    return json_response(password = password)
-    salted = bcrypt.hashpw( bytes(password, 'utf-8') , bcrypt.gensalt(10))
+    username = request.form['username']
+    password = request.form['password']
+    print("The username from the form: " + username)    
+    salted = bcrypt.hashpw( bytes(password, 'utf-8') , bcrypt.gensalt(10))    
     print(salted)
     print( str(salted.decode('utf-8')))
     cur=global_db_con.cursor()
-    cur.execute(f"select * from users where username = '{username}';")
+    cur.execute(f"select * from _user where username = '{username}';")
     userName = cur.fetchone()[1]
-    cur.execute(f"select * from users where username = '{username}';")
+    cur.execute(f"select * from _user where username = '{username}';")
     passWord = cur.fetchone()[2]
     print("The username from the database: " + userName)
     print("The password from the database: " + passWord)
@@ -102,7 +104,7 @@ def logging():
     else:
         print("It does not match:")
         msg=("mistmatch")
-        return json_response(data = msg)
+        return json_response(data = username)
 
 @app.route('/book', methods=['GET'])#endpoint
 def books():
