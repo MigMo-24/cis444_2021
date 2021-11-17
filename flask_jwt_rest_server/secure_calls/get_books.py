@@ -6,6 +6,13 @@ from tools.logging import logger
 
 def handle_request():
     logger.debug("Get Books Handle Request")
+    cur = g.db.cursor()
+    cur.execute("Select title from _book")
+    books = cur.fetchall()
+    bookList = []
+    for r in books:
+        bookList.append(r)
 
-    return json_response( token = create_token(  g.jwt_data ) , books = {})
+    print("Books has: ", books)
+    return json_response( token = create_token(  g.jwt_data ), data = bookList )
 

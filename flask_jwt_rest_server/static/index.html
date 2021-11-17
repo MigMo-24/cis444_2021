@@ -28,9 +28,26 @@
 
 		function get_books(){
 			 //make secure call with the jwt
-                         secure_get_with_token("/secure_api/get_books", function(data){console.log("got books"); console.log(data)},
-                                                function(err){ console.log(err) });
+                         secure_get_with_token("/secure_api/get_books", function(data){
+				 bookList = data.data
+				 alert(bookList)
+				 console.log("got books");
+				 console.log(data) 
+				 $('#mydiv').html(bookList);
+				 for (var i = 0; i<bookList.length; i++)
+				 {
+					 book = bookList[i];
+					 alert(book);
+					 $('#bookSelection').append('<option value="'+ book +'">'+book +' </option>');
+				 }
+				  
+				 
+			 },
+
+				 function(err){ console.log(err) });
 		}
+		
+
 
 	</script>
             <div id="login">
@@ -41,6 +58,13 @@
   				<input type="password" id="password" name="password" value="12212"><br><br>
   			<input type="submit" value="Signup" onclick="return send_form();">
 		</form>
+	    </div>
+
+	    <div id = "book" >
+		    <h2>Book Selection:</h2>
+		    <select name="bookSelection" id="bookSelection">
+		    </select>
+		    <input type="submit" value="Buying" onclick= "return bookFunction();" >
 	    </div>
     </body>
 </html>
