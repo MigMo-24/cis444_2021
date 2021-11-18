@@ -5,7 +5,7 @@ from tools.token_tools import create_token
 from tools.logging import logger
 
 def handle_request():
-    logger.debug("Get Books Handle Request")
+    logger.debug("Get Books Handle Request")   
     cur = g.db.cursor()
     cur.execute("Select * from _book")
     books = cur.fetchall()

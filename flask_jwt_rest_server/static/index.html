@@ -54,7 +54,7 @@
 
 		function get_books(){
 			 //make secure call with the jwt
-			secure_get_with_token("/secure_api/get_books", {"this": "that"},function(data, textStatus){
+			secure_get_with_token("/secure_api/get_books", function(data, textStatus){
 				 bookList = data.data
 				 console.log("got books");
 				 $('#book').show();
@@ -62,20 +62,26 @@
 				 $('#mydiv').html(bookList);
 				 for (var i = 0; i<bookList.length; i++)
 				 {
-					 book = bookList[i];					 
-					 $('#bookSelection').append('<option value="'+ book +'">'+book +' </option>');
+					 id = bookList[i][0]
+					 book = bookList[i][1];					 
+					 qty = bookList[i][2];
+					 price = bookList[i][3];
+					 $('#bookSelection').append('<option value="'+ id +": " + book +",$"+ price+'">'+ id +": "+book +",$"+price+ '" </option>');
 				 }
 				  $('#login').hide();
-				 
-			 },
-
-				 function(err){ console.log(err) });
+			},
+				function(err){
+					console.log(err)
+				});
 		}
+
 		function buy_book(book_id){
 			//make secure call with the jwt
-			secure_get_with_token("/secure_api/get_books", {"book_id" : book_id} , function(data){
+			secure_get_with_token("/secure_api/get_books", {"book_id" : $('bookSelection').val()} , function(data){
+			
+				alert($('bookSelection').val());
 				console.log("got books"); 
-				console.log(data)
+				console.log(data);
 			},
 				function(err){ 
 					console.log(err) 
@@ -85,6 +91,7 @@
 		//It shows signin form when click button and hide login form
 		$(document).ready(function(){
 			$('#sign_button').click(function(){
+				//location.reload(true);
 				$('#signin').show();
 				$('#login').hide(); 
 				 
@@ -93,6 +100,7 @@
 		//It hides signin form when click the login button and show the login form
 		$(document).ready(function(){
 			$('#log_button').click(function(){
+				//location.reload(true);
 				$('#login').show();
 				$('#signin').hide();
 			});
