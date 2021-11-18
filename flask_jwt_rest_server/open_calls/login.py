@@ -24,12 +24,12 @@ def handle_request():
     print(username)                                                                                                            
     print(password)
     if (bcrypt.checkpw( bytes( password_from_user_form,'utf-8' ),password.encode('utf-8' ))):
-        print("It matches")
+        print("match")
 
         user = {
             "sub" : request.form['firstname'] #sub is used by pyJwt as the owner of the token
             }
         return json_response( token = create_token(user) , authenticated = True)      
     
-    
-    return render_template('backatu.html', input_from_browser = json_response(status_=401, message = 'Invalid credentials', authenticated =  False) )
+    print("no match ")
+    return json_response (status=401, message = 'Invalid credentials', authenticated =  False) 

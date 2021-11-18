@@ -14,5 +14,5 @@ def handle_request():
         bookList.append(r)
 
     print("Books has: ", books)
-    return json_response( token = create_token(  g.jwt_data ), data = bookList )
+    return json_response( token = create_token(  g.jwt_data ), data = books)
 

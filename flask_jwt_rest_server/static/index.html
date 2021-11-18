@@ -1,6 +1,7 @@
 <!DOCTYPE html>
 <html>
     <head>
+	     <link rel="stylesheet" href="myStyle.css"> 
 	     <script src="https://code.jquery.com/jquery-3.6.0.js" 
 		     integrity="sha256-H+K7U5CnXl1h5ywQfKtSj8PCmoN9aaq30gDh27Xc0jk=" crossorigin="anonymous"></script>
 	     <script src="/static/cis444.js"></script>
@@ -8,16 +9,24 @@
     <body>
 
 	<script>
+	
 		function send_form(){
 			$.post("/open_api/login", { "firstname":$('#fname').val(), "password":$('#password').val()},
                        		function(data, textStatus) {
 					//this gets called when browser receives response from server
 					console.log(data.token);
-					//Set global JWT
-					jwt = data.token;
-					print (jwt)
-					//make secure call with the jwt
-					get_books();
+					console.log(data.status);
+					statusCode = data.status;
+					if (statusCode == 401){
+						msgCd = "Your are not authorized because are not user"; 
+						$('#login').append('<p>'+ msgCd +'  </p>');
+					}
+					else{
+						//Set global JWT
+						jwt = data.token;
+					        //make secure call with the jwt
+					        get_books();
+					}
 				}, "json").fail( function(response) {
 					//this gets called if the server throws an error
 					console.log("error");
@@ -26,41 +35,90 @@
 			return false;
 		}
 
+		function sSend_form(){
+			$.post("/open_api/signin", { "firstname":$('#sName').val(), "password":$('#sPassword').val()},
+				function(data, textStatus) {
+					//this gets called when browser receives response from server
+					console.log(data.data);
+					msg = data.data;
+					$('#signin').append('<p>'+ msg +'  </p>'); 
+				}, "json").fail( function(response) {
+					//this gets called if the server throws an error
+					console.log("error");
+					console.log(response);
+				});
+			return false;
+		} 
+
 		function get_books(){
 			 //make secure call with the jwt
-                         secure_get_with_token("/secure_api/get_books", function(data){
+                         secure_get_with_token("/secure_api/get_books", function(data, textStatus){
 				 bookList = data.data
-				 alert(bookList)
 				 console.log("got books");
+				 $('#book').show();
 				 console.log(data) 
 				 $('#mydiv').html(bookList);
 				 for (var i = 0; i<bookList.length; i++)
 				 {
-					 book = bookList[i];
-					 alert(book);
+					 book = bookList[i];					 
 					 $('#bookSelection').append('<option value="'+ book +'">'+book +' </option>');
 				 }
-				  
+				  $('#login').hide();
 				 
 			 },
 
 				 function(err){ console.log(err) });
 		}
+		$(document).ready(function(){
+			$('#button').click(function(){
+				$('#signin').toggle(function(){
+					if ($('#login').is(":visible")){
+						$('#login').toggle()
+						
+					}else{
+						
+						$('#login').show()
+					 
+
+					}
+				});
+
+			});
+			
+		});
+		
+		
 		
 
 
 	</script>
-            <div id="login">
-	    	<form >
+	 <p>Please click on sign up button if you do not have and account</p>
+	 <button type = "button" id=button >Create Account</button>
+
+            <div id="login" >
+	    	<form id= "login" >
   			<label for="fname">First name:</label><br>
   				<input type="text" id="fname" name="fname" value="John"><br>
   			<label for="password">Password:</label><br>
   				<input type="password" id="password" name="password" value="12212"><br><br>
-  			<input type="submit" value="Signup" onclick="return send_form();">
+				<input type= "submit" value="Login" onclick="return send_form();">
 		</form>
 	    </div>
+	     
 
-	    <div id = "book" >
+	    <div id= "signin" style = " display: none"  >
+		    <form id = "signin"  >
+			    <label for = "sName"> username: </label><br>
+			    <input type="text" id="sName" name="sName" value= "John"><br>
+			    <label for="sPassword"> Password: </label><br>
+				 <input type="password" id="sPassword" name="sPassword" value="12212"><br><br>
+		            <input type="submit" value="Signup" onclick="return sSend_form();">
+				
+			    
+		    </form>
+	    </div>
+
+	    <div id = "book" style = "display: none">
 		    <h2>Book Selection:</h2>
 		    <select name="bookSelection" id="bookSelection">
 		    </select>

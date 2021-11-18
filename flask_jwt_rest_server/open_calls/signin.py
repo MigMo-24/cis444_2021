@@ -1,4 +1,4 @@
-from flask import request, g
+from flask import request, g, render_template
 from flask_json import FlaskJSON, JsonError, json_response, as_json
 from tools.token_tools import create_token
 import bcrypt
@@ -22,11 +22,11 @@ def handle_request():
     if isFound == None:
         salted = bcrypt.hashpw(bytes(password_from_user_form, 'utf-8'), bcrypt.gensalt(10))
         cur.execute("Insert into _user(username, password) values('%s','%s');" %(username,salted.decode('utf-8')))
-        global_db_con.commit()
-        user = {
-            "sub" : request.form['firstname'] #sub is used by pyJwt as the owner of the token
-            }
-        return json_response( token = create_token(user) , authenticated = True)      
-    
-    
-      return json_response(status_=401, message = 'Invalid credentials', authenticated =  False) )
+        g.db.commit()
+        sMessage = "User has been created, please logging"
+        print(sMessage)
+        return render_template('backatu.html', input_from_browser = sMessage,data = sMessage)
+    else:
+        print("existing user")
+        str = (' Username exist');
+        return json_response(data = str)
