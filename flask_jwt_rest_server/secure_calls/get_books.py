@@ -7,12 +7,12 @@ from tools.logging import logger
 def handle_request():
     logger.debug("Get Books Handle Request")
     cur = g.db.cursor()
-    cur.execute("Select title from _book")
+    cur.execute("Select * from _book")
     books = cur.fetchall()
     bookList = []
     for r in books:
         bookList.append(r)
 
-    print("Books has: ", books)
+    print("Books have ", books)
     return json_response( token = create_token(  g.jwt_data ), data = books)
 

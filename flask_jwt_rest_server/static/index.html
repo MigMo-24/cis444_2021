@@ -9,6 +9,7 @@
     <body>
 
 	<script>
+		var my_jwt = null;
 	
 		function send_form(){
 			$.post("/open_api/login", { "firstname":$('#fname').val(), "password":$('#password').val()},
@@ -24,7 +25,8 @@
 					else{
 						//Set global JWT
 						jwt = data.token;
-					        //make secure call with the jwt
+					        my_jwt = jwt;
+						//make secure call with the jwt
 					        get_books();
 					}
 				}, "json").fail( function(response) {
@@ -52,7 +54,7 @@
 
 		function get_books(){
 			 //make secure call with the jwt
-                         secure_get_with_token("/secure_api/get_books", function(data, textStatus){
+			secure_get_with_token("/secure_api/get_books", {"this": "that"},function(data, textStatus){
 				 bookList = data.data
 				 console.log("got books");
 				 $('#book').show();
@@ -69,6 +71,18 @@
 
 				 function(err){ console.log(err) });
 		}
+		function buy_book(book_id){
+			//make secure call with the jwt
+			secure_get_with_token("/secure_api/get_books", {"book_id" : book_id} , function(data){
+				console.log("got books"); 
+				console.log(data)
+			},
+				function(err){ 
+					console.log(err) 
+				});
+		}
+
+		//It shows signin form when click button and hide login form
 		$(document).ready(function(){
 			$('#sign_button').click(function(){
 				$('#signin').show();
@@ -76,20 +90,13 @@
 				 
 			});
 		});
-
+		//It hides signin form when click the login button and show the login form
 		$(document).ready(function(){
 			$('#log_button').click(function(){
 				$('#login').show();
 				$('#signin').hide();
 			});
-		}); 
-
-		
-			
-		
-		
-		
-		
+		});
 
 
 	</script>
@@ -98,8 +105,8 @@
 
             <div id="login" >
 	    	<form id= "login" >
-			 <button type = "button" id=sign_button >Create Account</button> 
-  			<label for="fname">First name:</label><br>
+			<button type = "button" id=sign_button >Click to create an Account</button>
+  			<label for="fname">Username:</label><br>
   				<input type="text" id="fname" name="fname" value="John"><br>
   			<label for="password">Password:</label><br>
   				<input type="password" id="password" name="password" value="12212"><br><br>
@@ -110,8 +117,8 @@
 
 	    <div id= "signin" style = " display: none"  >
 		    <form id = "signin"  >
-			    <button type = "button" id=log_button >Login</button>
-			    <label for = "sName"> username: </label><br>
+			    <button type = "button" id=log_button >Click to Login</button>
+			    <label for = "sName"> Username: </label><br>
 			    <input type="text" id="sName" name="sName" value= "John"><br>
 			    <label for="sPassword"> Password: </label><br>
 				 <input type="password" id="sPassword" name="sPassword" value="12212"><br><br>
@@ -125,7 +132,7 @@
 		    <h2>Book Selection:</h2>
 		    <select name="bookSelection" id="bookSelection">
 		    </select>
-		    <input type="submit" value="Buying" onclick= "return bookFunction();" >
+		    <input type="submit" value="Buying" onclick= "return buy_book();" >
 	    </div>
     </body>
 </html>
