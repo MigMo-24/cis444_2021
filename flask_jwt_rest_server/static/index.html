@@ -70,22 +70,23 @@
 				 function(err){ console.log(err) });
 		}
 		$(document).ready(function(){
-			$('#button').click(function(){
-				$('#signin').toggle(function(){
-					if ($('#login').is(":visible")){
-						$('#login').toggle()
-						
-					}else{
-						
-						$('#login').show()
-					 
-
-					}
-				});
-
+			$('#sign_button').click(function(){
+				$('#signin').show();
+				$('#login').hide(); 
+				 
 			});
-			
 		});
+
+		$(document).ready(function(){
+			$('#log_button').click(function(){
+				$('#login').show();
+				$('#signin').hide();
+			});
+		}); 
+
+		
+			
+		
 		
 		
 		
@@ -93,10 +94,11 @@
 
 	</script>
 	 <p>Please click on sign up button if you do not have and account</p>
-	 <button type = "button" id=button >Create Account</button>
+	<!-- <button type = "button" id=button >Create Account</button>-->
 
             <div id="login" >
 	    	<form id= "login" >
+			 <button type = "button" id=sign_button >Create Account</button> 
   			<label for="fname">First name:</label><br>
   				<input type="text" id="fname" name="fname" value="John"><br>
   			<label for="password">Password:</label><br>
@@ -108,6 +110,7 @@
 
 	    <div id= "signin" style = " display: none"  >
 		    <form id = "signin"  >
+			    <button type = "button" id=log_button >Login</button>
 			    <label for = "sName"> username: </label><br>
 			    <input type="text" id="sName" name="sName" value= "John"><br>
 			    <label for="sPassword"> Password: </label><br>
