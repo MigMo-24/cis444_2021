@@ -54,7 +54,9 @@
 
 		function get_books(){
 			 //make secure call with the jwt
-			secure_get_with_token("/secure_api/get_books",{}, function(data, textStatus){
+			secure_get_with_token("/secure_api/get_books",{}, 
+				//It gets call when come back from server
+				function(data, textStatus){
 				 bookList = data.data
 				 console.log("got display books");
 				 $('#book').show();
@@ -80,7 +82,8 @@
 
 		function buy_book(){
 			//make secure call with the jwt
-			secure_get_with_token("/secure_api/get_book", {"book_id":$('#bookSelection').val()},
+			secure_get_with_token("/secure_api/get_books", {"book_id":$('#bookSelection').val()},
+				//It gets call when comes back from the server
 				function(data){
 					console.log("--got buying books--"); 
 					console.log(data);
