@@ -10,6 +10,7 @@
 
 	<script>
 		var my_jwt = null;
+		var a = null;
 	
 		function send_form(){
 			$.post("/open_api/login", {"firstname":$('#fname').val(), "password":$('#password').val()},
@@ -62,27 +63,36 @@
 				 $('#book').show();
 				 console.log(data) 
 				 $('#mydiv').html(bookList[0][1]);
-				 for (var i = 0; i<4; i++)
-				 {
-					 id = bookList[i][0]
-					 book = bookList[i][1];					 
-					 qty = bookList[i][2];
-					 price = bookList[i][3];
-					 $('#bookSelection').append('<option value="'+ id +'">'+ id + ' </option>');
+
+
+					for (var i = 0; i<4; i++)
+				 	{
+						id = bookList[i][0]
+					 	book = bookList[i][1];					 
+					 	qty = bookList[i][2];
+					 	price = bookList[i][3];
+						$('#bookSelection').append('<tr>'
+							+'<td class ="id">'+ id+'</td>'						
+							+'<td>'+book+'</td>'
+							+'<td>'+price+'</td>'
+							+'<td><button id = "buybtn"  class="buybtn" >select</button><td>'
+							+ '</tr>');
+					 	 
+						//$('#bookSelection').append('<option value="'+ id +'">'+ id + ' </option>');
 					 
-				 }
-				  idSelection = $('#bookSelection').val();
-				  alert(idSelection);
-				  $('#login').hide();
-			},
+					 }
+					idSelection = $('#bookSelection.nr').val();
+				  	alert(idSelection);
+				  	$('#login').hide();
+				},
 				function(err){
-					console.log(err)
+				console.log(err)
 				});
 		}
 
-		function buy_book(){
+		function buy_book(book_id){
 			//make secure call with the jwt
-			secure_get_with_token("/secure_api/get_books", {"book_id":$('#bookSelection').val()},
+			secure_get_with_token("/secure_api/get_books", {"book_id":book_id},
 				//It gets call when comes back from the server
 				function(data){
 					console.log("--got buying books--"); 
@@ -111,7 +121,13 @@
 				$('#signin').hide();
 			});
 		});
-
+		
+		$(document ).on("click","#bookSelection button.buybtn",function() {
+			    let tr = $(this).closest('tr');
+			    a = tr.find('td:eq(0)').text();
+			    let b = tr.find('td:eq(2)').text(); 
+			    alert('ID: ' + a );
+										      });
 
 	</script>
 	 <p>Please click on sign up button if you do not have and account</p>
@@ -119,7 +135,7 @@
 
             <div id="login" >
 	    	<form id= "login" >
-			<button type = "button" id=sign_button >Click to create an Account</button>
+			<button type = "button" id="sign_button" >Click to create an Account</button>
   			<label for="fname">Username:</label><br>
   				<input type="text" id="fname" name="fname" value="John"><br>
   			<label for="password">Password:</label><br>
@@ -131,7 +147,7 @@
 
 	    <div id= "signin" style = " display: none"  >
 		    <form id = "signin"  >
-			    <button type = "button" id=log_button >Click to Login</button>
+			    <button type = "button" id="log_button" >Click to Login</button>
 			    <label for = "sName"> Username: </label><br>
 			    <input type="text" id="sName" name="sName" value= "John"><br>
 			    <label for="sPassword"> Password: </label><br>
@@ -142,11 +158,20 @@
 		    </form>
 	    </div>
 
-	    <div id = "book" style = "display: none">
+	    <div id= "book" style = "display: none">
 		    <h2>Book Selection:</h2>
-		    <select name="bookSelection" id="bookSelection">
-		    </select>
-		    <input type="submit" value="Buying" onclick= "return buy_book();" >
+		    <table  name="bookSelection" id="bookSelection" class = "bookSelection">
+			    
+			    <tr>
+				    <th>ID</th>
+				    <th>Title</th>
+				    <th>Price</th>
+			    </tr>
+			    
+
+		    </table>
+		    
+		    <input type="submit" value="Buying" onclick= "return buy_book(a);" 
 	    </div>
     </body>
 </html>
