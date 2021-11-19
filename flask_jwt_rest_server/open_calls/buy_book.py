@@ -7,15 +7,11 @@ from tools.logging import logger
 def handle_request():
     logger.debug("buy_book Handle Request")
     #use data here to auth the user
-    book_id = form.request['book_id']
-    print (book_id)   
-    cur = g.db.cursor()
-    cur.execute(f"select * from _book where book_id = '{book_id }';")
-    found = cur.fetchall()
-    cur.execute("Insert into purchase(found[0, found[1],found[2]) values('%s','%s','%s');" %(book_id, title, price))
-    global_db_con.commit()
-    
-    return json_response( token = create_token(user) , authenticated = True)      
+
+    username = request.form['username']
+    print (username)   
+  
+    return json_response( status = "sucessful")      
     
        
 

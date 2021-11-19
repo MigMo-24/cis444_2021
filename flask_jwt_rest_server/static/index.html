@@ -12,7 +12,7 @@
 		var my_jwt = null;
 	
 		function send_form(){
-			$.post("/open_api/login", { "firstname":$('#fname').val(), "password":$('#password').val()},
+			$.post("/open_api/login", {"firstname":$('#fname').val(), "password":$('#password').val()},
                        		function(data, textStatus) {
 					//this gets called when browser receives response from server
 					console.log(data.token);
@@ -54,20 +54,23 @@
 
 		function get_books(){
 			 //make secure call with the jwt
-			secure_get_with_token("/secure_api/get_books", function(data, textStatus){
+			secure_get_with_token("/secure_api/get_books",{}, function(data, textStatus){
 				 bookList = data.data
-				 console.log("got books");
+				 console.log("got display books");
 				 $('#book').show();
 				 console.log(data) 
-				 $('#mydiv').html(bookList);
-				 for (var i = 0; i<bookList.length; i++)
+				 $('#mydiv').html(bookList[0][1]);
+				 for (var i = 0; i<4; i++)
 				 {
 					 id = bookList[i][0]
 					 book = bookList[i][1];					 
 					 qty = bookList[i][2];
 					 price = bookList[i][3];
-					 $('#bookSelection').append('<option value="'+ id +": " + book +",$"+ price+'">'+ id +": "+book +",$"+price+ '" </option>');
+					 $('#bookSelection').append('<option value="'+ id +'">'+ id + ' </option>');
+					 
 				 }
+				  idSelection = $('#bookSelection').val();
+				  alert(idSelection);
 				  $('#login').hide();
 			},
 				function(err){
@@ -75,17 +78,16 @@
 				});
 		}
 
-		function buy_book(book_id){
+		function buy_book(){
 			//make secure call with the jwt
-			secure_get_with_token("/secure_api/get_books", {"book_id" : $('bookSelection').val()} , function(data){
-			
-				alert($('bookSelection').val());
-				console.log("got books"); 
-				console.log(data);
-			},
+			secure_get_with_token("/secure_api/get_book", {"book_id":$('#bookSelection').val()},
+				function(data){
+					console.log("--got buying books--"); 
+					console.log(data);
+				},
 				function(err){ 
-					console.log(err) 
-				});
+					console.log(err);
+				}); 
 		}
 
 		//It shows signin form when click button and hide login form
@@ -97,6 +99,7 @@
 				 
 			});
 		});
+
 		//It hides signin form when click the login button and show the login form
 		$(document).ready(function(){
 			$('#log_button').click(function(){
