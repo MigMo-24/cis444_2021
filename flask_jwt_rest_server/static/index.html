@@ -11,7 +11,8 @@
 	<script>
 		var my_jwt = null;
 		var a = null;
-	
+		//Allow the user to loging or if the user enter a wrong username it will let the user knows that there no username with
+                //and prompt to create and account
 		function send_form(){
 			$.post("/open_api/login", {"firstname":$('#fname').val(), "password":$('#password').val()},
                        		function(data, textStatus) {
@@ -38,7 +39,7 @@
 				});
 			return false;
 		}
-
+                //Allow a user to create an account if there is an account prompt the user to login.
 		function sSend_form(){
 			$.post("/open_api/signin", { "firstname":$('#sName').val(), "password":$('#sPassword').val()},
 				function(data, textStatus) {
@@ -53,7 +54,7 @@
 				});
 			return false;
 		} 
-
+                //Gets the books from the database and display them in a table with a button to select book 
 		function get_books(){
 			 //make secure call with the jwt
 			secure_get_with_token("/secure_api/get_books",{}, 
@@ -89,7 +90,7 @@
 				console.log(err)
 				});
 		}
-
+                //Allow the user to buy a book by sending the book to the purchase table and print message that the book is bought 
 		function buy_book(book_id){
 			//make secure call with the jwt
 			secure_get_with_token("/secure_api/get_books", {"book_id":book_id},
@@ -124,7 +125,7 @@
 				$('#signin').hide();
 			});
 		});
-		
+		//It gets the value from the button when click 
 		$(document ).on("click","#bookSelection button.buybtn",function() {
 			    let tr = $(this).closest('tr');
 			    a = tr.find('td:eq(0)').text();
@@ -135,7 +136,7 @@
 	</script>
 	 <p>Please click on sign up button if you do not have and account</p>
 	<!-- <button type = "button" id=button >Create Account</button>-->
-
+	<!--Loging form-->
             <div id="login" >
 	    	<form id= "login" >
 			<button type = "button" id="sign_button" >Click to create an Account</button>
@@ -143,11 +144,12 @@
   				<input type="text" id="fname" name="fname" value="John"><br>
   			<label for="password">Password:</label><br>
   				<input type="password" id="password" name="password" value="12212"><br><br>
+				<!--<Button to login-->  
 				<input type= "submit" value="Login" onclick="return send_form();">
 		</form>
 	    </div>
 	     
-
+	    <!--Signin form-->
 	    <div id= "signin" style = " display: none"  >
 		    <form id = "signin"  >
 			    <button type = "button" id="log_button" >Click to Login</button>
@@ -155,12 +157,13 @@
 			    <input type="text" id="sName" name="sName" value= "John"><br>
 			    <label for="sPassword"> Password: </label><br>
 				 <input type="password" id="sPassword" name="sPassword" value="12212"><br><br>
+				 <!--<Button to signin-->  
 		            <input type="submit" value="Signup" onclick="return sSend_form();">
 				
 			    
 		    </form>
 	    </div>
-
+            <!--<Table book-->
 	    <div id= "book" style = "display: none">
 		    <h2>Book Selection:</h2>
 		    <table  name="bookSelection" id="bookSelection" class = "bookSelection">
@@ -173,7 +176,7 @@
 			    
 
 		    </table>
-		    
+		    <!--<button to buy book-->  
 		    <input type="submit" value="Buying" onclick= "return buy_book(a);" 
 	    </div>
     </body>
