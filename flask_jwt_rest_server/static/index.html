@@ -20,10 +20,11 @@
 					console.log(data.status);
 					statusCode = data.status;
 					if (statusCode == 401){
-						msgCd = "Your are not authorized because are not user"; 
+						msgCd = "Your are not authorized because you are not a user"; 
 						$('#login').append('<p>'+ msgCd +'  </p>');
 					}
 					else{
+						msgSucess = data.data;  
 						//Set global JWT
 						jwt = data.token;
 					        my_jwt = jwt;
@@ -76,13 +77,12 @@
 							+'<td>'+book+'</td>'
 							+'<td>'+price+'</td>'
 							+'<td><button id = "buybtn"  class="buybtn" >select</button><td>'
-							+ '</tr>');
-					 	 
+							+ '</tr>');					 	 
 						//$('#bookSelection').append('<option value="'+ id +'">'+ id + ' </option>');
 					 
 					 }
-					idSelection = $('#bookSelection.nr').val();
-				  	alert(idSelection);
+					//idSelection = $('#bookSelection.nr').val();
+				  	//alert(idSelection);
 				  	$('#login').hide();
 				},
 				function(err){
@@ -95,7 +95,10 @@
 			secure_get_with_token("/secure_api/get_books", {"book_id":book_id},
 				//It gets call when comes back from the server
 				function(data){
-					console.log("--got buying books--"); 
+					console.log("--got buying books--");
+					alert("Thank You for your purchase");
+					msgP = "Thank you for purchase";
+					$('#book').append('<p>'+ msgP +'  </p>'); 
 					console.log(data);
 				},
 				function(err){ 
@@ -126,7 +129,7 @@
 			    let tr = $(this).closest('tr');
 			    a = tr.find('td:eq(0)').text();
 			    let b = tr.find('td:eq(2)').text(); 
-			    alert('ID: ' + a );
+			    alert('The book selected has ID: ' + a );
 										      });
 
 	</script>

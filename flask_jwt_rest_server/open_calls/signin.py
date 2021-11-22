@@ -25,7 +25,7 @@ def handle_request():
         g.db.commit()
         sMessage = "User has been created, please logging"
         print(sMessage)
-        return render_template('backatu.html', input_from_browser = sMessage,data = sMessage)
+        return json_response (data = sMessage)
     else:
         print("existing user")
         str = (' Username exist');
