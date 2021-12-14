@@ -1,5 +1,6 @@
 from flask import Flask,render_template,request, redirect, url_for, g
 from flask_json import FlaskJSON, JsonError, json_response, as_json
+from flask_socketio import SocketIO
 import jwt
 
 import sys
@@ -22,6 +23,9 @@ ERROR_MSG = "Ooops.. Didn't work!"
 app = Flask(__name__)
 #add in flask json
 FlaskJSON(app)
+
+app.config['SECRET_KEY'] = 'vnkdjnfjknfl1232#'
+socketio = SocketIO(app)
 
 #g is flask for a global var storage 
 def init_new_env():
@@ -59,8 +63,6 @@ def exec_secure_proc(proc_name):
 
     return resp
 
-
-
 @app.route("/open_api/<proc_name>",methods=['GET', 'POST'])
 def exec_proc(proc_name):
     logger.debug(f"Call to {proc_name}")
@@ -82,7 +84,14 @@ def exec_proc(proc_name):
 
     return resp
 
+def messageReceived(methods=['GET', 'POST']):
+    print('message was received!!!')
+
+@socketio.on('my event')
+def handle_my_custom_event(json, methods=['GET', 'POST']):
+    print('received my event: ' + str(json))
+    socketio.emit('my response', json, callback=messageReceived)
 
 if __name__ == '__main__':
-    app.run(host='0.0.0.0', port=80)
+    socketio.run(app, debug = True, host='0.0.0.0', port=80)
 

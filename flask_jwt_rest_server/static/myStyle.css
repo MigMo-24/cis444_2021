@@ -1,9 +1,15 @@
 body {
-	margin: 20px 0;
+	border: 1px solid black;
+	margin: 50px ;
 	font-family: 'Lato';
 	font-weight: 300;
 	font-size: 1.25rem;
 	width: 300px;
+}
+
+h3{
+	color:  #ccc;
+	font-size: 30px; 
 }
 
 label {
@@ -49,3 +55,4 @@ tr:nth-child(even) {
 tr:hover {
 	background-color: #ccc;
 }
+
